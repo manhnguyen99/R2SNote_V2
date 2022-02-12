@@ -1,0 +1,2 @@
+rootProject.name = "R2SNote_V2"
+include ':app'
