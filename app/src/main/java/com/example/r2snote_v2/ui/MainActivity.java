@@ -1,8 +1,10 @@
-package com.example.r2snote_v2;
+package com.example.r2snote_v2.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.r2snote_v2.R;
 
 public class MainActivity extends AppCompatActivity {
 

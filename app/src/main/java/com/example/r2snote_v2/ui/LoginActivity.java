@@ -1,10 +1,12 @@
 package com.example.r2snote_v2.ui;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtPassword;
     private Button btnLogin;
     private TextView txtSignUp;
-    private User user;
     private UserService userService;
 
     @Override
@@ -87,12 +88,36 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         Call<User> call = userService.getUserByEmail(email,pass);
+
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.body() != null)
+                if (response.isSuccessful())
                 {
-                    Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                    User user = response.body();
+                    Log.d("LOGINNNNN", "onResponse: " +user);
+                    if (user.getStatus() == -1 && user.getError() == 2)
+                    {
+                        Toast.makeText(LoginActivity.this, "invalid Password", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else if (user.getStatus() == -1 && user.getError() == 1)
+                    {
+                        Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else
+                    {
+                        Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            }
+                        }, 700);
+
+                    }
                 }
             }
 
@@ -102,10 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
-
 
     private void initUI() {
         edtEmail = findViewById(R.id.edtEmail);
