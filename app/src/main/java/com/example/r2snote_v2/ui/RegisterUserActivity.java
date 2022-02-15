@@ -72,16 +72,24 @@ public class RegisterUserActivity extends AppCompatActivity {
             return;
         }
 
-
 //        User user = new User(email, pass, fname, lname);
 
         Call<User> call = userService.createNewUser(email, pass, fname, lname);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.body() != null){
-                    Toast.makeText(RegisterUserActivity.this, "Signup successfully", Toast.LENGTH_SHORT).show();
-                    finish();
+                if (response.isSuccessful()){
+
+                    User user = response.body();
+                    if (user.getStatus() == -1 && user.getError() == 2)
+                    {
+                        Toast.makeText(RegisterUserActivity.this, "Email is used", Toast.LENGTH_SHORT).show();
+
+                    }
+                    if (user.getStatus() == 1) {
+                        Toast.makeText(RegisterUserActivity.this, "Signup successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             }
             @Override

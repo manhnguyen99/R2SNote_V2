@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
         initEvent();
     }
 
-
 //
 //    private void getListUser() {
 ////        mNoteViewModel.getAllUser().enqueue(new Callback<ArrayList<User>>() {
