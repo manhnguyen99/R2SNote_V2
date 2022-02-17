@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.r2snote_v2.R;
+import com.example.r2snote_v2.fragment.DashboardFragment;
 import com.example.r2snote_v2.fragment.PriorityFragment;
 import com.example.r2snote_v2.model.User;
 

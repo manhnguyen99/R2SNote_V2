@@ -19,6 +19,10 @@ import com.example.r2snote_v2.model.PriorityData;
 import com.example.r2snote_v2.model.User;
 import com.example.r2snote_v2.repository.PriorityRepository;
 import com.example.r2snote_v2.ui.MainActivity;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +41,7 @@ public class PriorityFragment extends Fragment {
 
     public PriorityFragment() {
     }
-    public static PriorityFragment newInstance(String param1, String param2) {
+    public static PriorityFragment newInstance() {
         PriorityFragment fragment = new PriorityFragment();
         return fragment;
     }
@@ -45,7 +49,6 @@ public class PriorityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -56,6 +59,8 @@ public class PriorityFragment extends Fragment {
 
 
         recyclerViewPriority = view.findViewById(R.id.recyclerView);
+
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerViewPriority.setLayoutManager(linearLayoutManager);
