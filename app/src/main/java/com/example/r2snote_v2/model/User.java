@@ -22,8 +22,10 @@ public class User implements Serializable {
         this.info = info;
     }
 
+
     public User() {
     }
+
 
     public int getStatus() {
         return status;
@@ -40,6 +42,7 @@ public class User implements Serializable {
     public void setError(int error) {
         this.error = error;
     }
+
 
 
     public String getUserId() {
@@ -94,3 +97,6 @@ public class User implements Serializable {
                 '}';
     }
 }
+
+
+

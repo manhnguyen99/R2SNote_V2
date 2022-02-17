@@ -1,7 +1,7 @@
 package com.example.r2snote_v2.Service;
 
 import com.example.r2snote_v2.model.Note;
-import com.example.r2snote_v2.model.NoteData;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface NoteService {
+
     @GET("get?tab=Note&email")
     Call<Note> getAllNotes(
             @Query("email") String email);
@@ -43,4 +44,5 @@ public interface NoteService {
     Call<Note> deleteNote(
             @Query("email") String email,
             @Query("name") String name);
+
 }

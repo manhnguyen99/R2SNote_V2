@@ -1,10 +1,13 @@
 package com.example.r2snote_v2.ui;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +16,11 @@ import com.example.r2snote_v2.Service.UserService;
 import com.example.r2snote_v2.model.User;
 import com.example.r2snote_v2.repository.NoteRepository;
 
+
+import com.example.r2snote_v2.R;
+import com.example.r2snote_v2.Service.UserService;
+import com.example.r2snote_v2.model.User;
+import com.example.r2snote_v2.repository.UserRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +39,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         initEvent();
     }
     private void initEvent() {
-        userService = NoteRepository.getUserService();
+        userService = UserRepository.getUserService();
 
         btnSignUp.setOnClickListener(view -> {
             signUP();

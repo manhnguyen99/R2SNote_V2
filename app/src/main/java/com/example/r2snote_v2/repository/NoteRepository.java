@@ -11,6 +11,7 @@ import com.example.r2snote_v2.model.Note;
 import com.example.r2snote_v2.model.NoteData;
 import com.example.r2snote_v2.ui.MainActivity;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,4 +69,5 @@ public class NoteRepository {
     public Call<Note> removeNote(String email, String name) {
         return mNoteService.deleteNote(email, name);
     }
+
 }

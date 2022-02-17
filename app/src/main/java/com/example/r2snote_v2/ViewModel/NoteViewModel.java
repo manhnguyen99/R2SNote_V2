@@ -9,7 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.r2snote_v2.model.Note;
-import com.example.r2snote_v2.model.NoteData;
+import com.example.r2snote_v2.model.User;
+
 import com.example.r2snote_v2.repository.NoteRepository;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import retrofit2.Call;
 public class NoteViewModel extends AndroidViewModel{
 
     private RefreshLiveData<Note> mNoteList;
+
     private NoteRepository mNoteRepository;
 
     public NoteViewModel(@NonNull Application application) {

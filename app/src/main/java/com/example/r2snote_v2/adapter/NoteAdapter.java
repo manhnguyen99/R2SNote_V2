@@ -137,5 +137,4 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         editNameDialogFragment.show(manager, null);
     }
 
-
 }
