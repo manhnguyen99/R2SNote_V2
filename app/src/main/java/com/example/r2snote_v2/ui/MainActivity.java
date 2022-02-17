@@ -9,8 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.fragment.CategoryFragment;
@@ -20,6 +25,7 @@ import com.example.r2snote_v2.fragment.HomeFragment;
 import com.example.r2snote_v2.fragment.NoteFragment;
 import com.example.r2snote_v2.fragment.PriorityFragment;
 import com.example.r2snote_v2.fragment.StatusFragment;
+import com.example.r2snote_v2.model.User;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_STATUS = 3;
     private static final int FRAGMENT_NOTE = 4;
     private int currentFragment = FRAGMENT_HOME;
+    public static User userLogin;
 
 
     @Override
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void intUi() {
+        userLogin = (User) getIntent().getExtras().get("user");
         drawerLayout = findViewById(R.id.drawer_layout);
 
         //navigation drawer
@@ -59,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         replaceFragment(new HomeFragment());
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
+        View headerView = navigationView.getHeaderView(0);
+        TextView textView = headerView.findViewById(R.id.email_header);
+        textView.setText(userLogin.getEmail());
+
     }
 
     @Override
@@ -125,4 +137,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_option, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_logout:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

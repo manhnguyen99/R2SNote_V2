@@ -25,4 +25,5 @@ public class RefreshLiveData<T> extends MutableLiveData<T> {
     public final void refresh() {
         refreshAction.loadData(callback);
     }
+
 }

@@ -1,83 +1,43 @@
 package com.example.r2snote_v2.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Note implements Serializable {
+public class Note{
 
-    private long id;
-    private String title;
-    private String subTitle;
-    private String dateTime;
-    private String webLink;
-    private String color;
+    private long status;
+    private long error;
+    private List<List<String>> data;
 
 
-    public Note(long id, String title, String subTitle, String dateTime, String webLink, String color) {
-        this.id = id;
-        this.title = title;
-        this.subTitle = subTitle;
-        this.dateTime = dateTime;
-        this.webLink = webLink;
-        this.color = color;
+    public Note(long status, long error, List<List<String>> data) {
+        this.status = status;
+        this.error = error;
+        this.data = data;
     }
 
-    public Note(String title, String subTitle, String dateTime, String webLink, String color) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.dateTime = dateTime;
-        this.webLink = webLink;
-        this.color = color;
+    public long getStatus() {
+        return status;
     }
 
-    public long getId() {
-        return id;
+    public void setStatus(long status) {
+        this.status = status;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getError() {
+        return error;
     }
 
-    public String getTitle() {
-        return title;
+    public void setError(long error) {
+        this.error = error;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public List<List<String>> getData() {
+        return data;
     }
 
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
-
-    public String getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public String getWebLink() {
-        return webLink;
-    }
-
-    public void setWebLink(String webLink) {
-        this.webLink = webLink;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-    @Override
-    public String toString() {
-        return title + ':' + dateTime;
+    public void setData(List<List<String>> data) {
+        this.data = data;
     }
 }

@@ -17,13 +17,14 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:text="username"/>
+        android:text="Note Management System"/>
 
     <TextView
+        android:id="@+id/email_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="@color/white"
-        android:text="email"/>
+        android:text="kylh84@gmail.com"/>
 
 </LinearLayout>

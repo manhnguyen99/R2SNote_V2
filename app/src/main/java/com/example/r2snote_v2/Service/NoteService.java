@@ -1,8 +1,10 @@
 package com.example.r2snote_v2.Service;
 
 import com.example.r2snote_v2.model.Note;
+import com.example.r2snote_v2.model.NoteData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,20 +13,34 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface NoteService {
-    @GET("api/v1/Note")
-    Call<ArrayList<Note>> getAllNotes();
+    @GET("get?tab=Note&email")
+    Call<Note> getAllNotes(
+            @Query("email") String email);
 
-    @GET("api/v1/Note/{id}")
-    Call<Note> getNoteById(@Path("id") long id);
+    @GET("add?tab=Note&email&name&Priority&Category&Status&PlanDate")
+    Call<Note> postNote(
+            @Query("email") String email,
+            @Query("name") String name,
+            @Query("Priority") String Priority,
+            @Query("Category") String Category,
+            @Query("Status") String Status,
+            @Query("PlanDate") String PlanDate);
 
-    @POST("api/v1/Note")
-    Call<Note> postNote(@Body Note note);
+    @GET("update/?tab=Note&email&name&nname&Priority&Category&Status&PlanDate")
+    Call<Note> updateNote(
+            @Query("email") String email,
+            @Query("name") String name,
+            @Query("nname") String nname,
+            @Query("Priority") String Priority,
+            @Query("Category") String Category,
+            @Query("Status") String Status,
+            @Query("PlanDate") String PlanDate);
 
-    @PUT("api/v1/Note/{id}")
-    Call<Void> updateNote(@Path("id") long id, @Body Note note);
-
-    @DELETE("api/v1/Note/{id}")
-    Call<Void> deleteNote(@Path("id") long id);
+    @GET("del?tab=Note&email&name")
+    Call<Note> deleteNote(
+            @Query("email") String email,
+            @Query("name") String name);
 }

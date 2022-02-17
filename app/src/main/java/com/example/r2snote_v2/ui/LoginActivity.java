@@ -1,26 +1,19 @@
 package com.example.r2snote_v2.ui;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.Service.UserService;
-import com.example.r2snote_v2.ViewModel.NoteViewModel;
-import com.example.r2snote_v2.fragment.PriorityFragment;
 import com.example.r2snote_v2.model.User;
-import com.example.r2snote_v2.repository.UserRepository;
-
-import java.util.ArrayList;
+import com.example.r2snote_v2.repository.NoteRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initUI();
 //        getListUser();
-        userService = UserRepository.getUserService();
+        userService = NoteRepository.getUserService();
 
         initEvent();
     }

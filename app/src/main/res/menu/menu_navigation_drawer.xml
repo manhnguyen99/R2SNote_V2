@@ -9,22 +9,22 @@
             android:title="@string/title_home" />
 
         <item
-            android:icon="@drawable/ic_home"
+            android:icon="@drawable/ic_category"
             android:id="@+id/nav_category"
             android:title="@string/title_category" />
 
         <item
-            android:icon="@drawable/ic_home"
+            android:icon="@drawable/ic_priority"
             android:id="@+id/nav_priority"
             android:title="@string/title_priority" />
 
         <item
-            android:icon="@drawable/ic_home"
+            android:icon="@drawable/ic_status"
             android:id="@+id/nav_status"
             android:title="@string/title_status" />
 
         <item
-            android:icon="@drawable/ic_home"
+            android:icon="@drawable/ic_note"
             android:id="@+id/nav_note"
             android:title="@string/title_note" />
 
@@ -33,12 +33,12 @@
     <item android:title="@string/title_account">
         <menu>
             <item
-                android:icon="@drawable/ic_home"
+                android:icon="@drawable/ic_edit"
                 android:id="@+id/nav_edit_profile"
                 android:title="@string/title_edit_profile" />
 
             <item
-                android:icon="@drawable/ic_home"
+                android:icon="@drawable/ic_edit"
                 android:id="@+id/nav_change_password"
                 android:title="@string/title_change_pasword" />
         </menu>
