@@ -1,6 +1,9 @@
 package com.example.r2snote_v2.model;
 
-public class User {
+import java.io.Serializable;
+import java.util.List;
+
+public class User implements Serializable {
 
     private String userId;
     private String email;
@@ -9,6 +12,16 @@ public class User {
     private String lastName;
     private int status;
     private int error;
+    private Info info;
+
+
+    public User(String email, String passWord, int status, int error, Info info) {
+        this.email = email;
+        this.passWord = passWord;
+        this.status = status;
+        this.error = error;
+        this.info = info;
+    }
 
     public int getStatus() {
         return status;
@@ -26,31 +39,9 @@ public class User {
         this.error = error;
     }
 
-    public User(String email, String passWord) {
-        this.email = email;
-        this.passWord = passWord;
-    }
 
-    public User(String userId, String email, String passWord, String firstName, String lastName) {
-        this.userId = userId;
-        this.email = email;
-        this.passWord = passWord;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
-    public User(String userId, String email, String passWord) {
-        this.userId = userId;
-        this.email = email;
-        this.passWord = passWord;
-    }
 
-    public User(String email, String passWord, String firstName, String lastName) {
-        this.email = email;
-        this.passWord = passWord;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
     public String getUserId() {
         return userId;
@@ -96,13 +87,11 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
-                ", email='" + email + '\'' +
+                "email='" + email + '\'' +
                 ", passWord='" + passWord + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
                 ", status=" + status +
                 ", error=" + error +
+                ", info=" + info +
                 '}';
     }
 }

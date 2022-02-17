@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.Service.UserService;
 import com.example.r2snote_v2.ViewModel.NoteViewModel;
+import com.example.r2snote_v2.fragment.PriorityFragment;
 import com.example.r2snote_v2.model.User;
 import com.example.r2snote_v2.repository.UserRepository;
 
@@ -94,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful())
                 {
                     User user = response.body();
+                    user.setEmail(email);
+                    user.setPassWord(pass);
                     Log.d("LOGINNNNN", "onResponse: " +user);
                     if (user.getStatus() == -1 && user.getError() == 2)
                     {
@@ -108,13 +111,11 @@ public class LoginActivity extends AppCompatActivity {
                     else
                     {
                         Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            }
-                        }, 700);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("user", user);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
 
                     }
                 }
