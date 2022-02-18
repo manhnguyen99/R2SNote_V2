@@ -4,15 +4,12 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String userId;
     private String email;
     private String passWord;
-    private String firstName;
-    private String lastName;
+
     private int status;
     private int error;
     private Info info;
-
 
     public User(String email, String passWord, int status, int error, Info info) {
         this.email = email;
@@ -20,34 +17,6 @@ public class User implements Serializable {
         this.status = status;
         this.error = error;
         this.info = info;
-    }
-
-    public User() {
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getError() {
-        return error;
-    }
-
-    public void setError(int error) {
-        this.error = error;
-    }
-
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getEmail() {
@@ -66,22 +35,29 @@ public class User implements Serializable {
         this.passWord = passWord;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public int getStatus() {
+        return status;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getLastName() {
-        return lastName;
+    public int getError() {
+        return error;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setError(int error) {
+        this.error = error;
     }
 
+    public Info getInfo() {
+        return info;
+    }
+
+    public void setInfo(Info info) {
+        this.info = info;
+    }
 
     @Override
     public String toString() {

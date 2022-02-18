@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static String EMAIL, PASS, FIRSTNAME, LASTNAME;
     public static TextView textView;
 
-
+    public static User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);

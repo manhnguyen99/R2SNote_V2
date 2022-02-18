@@ -50,51 +50,46 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser() {
         String email = edtEmail.getText().toString().trim();
-        String pass  = edtPassword.getText().toString().trim();
-        if (email.isEmpty())
-        {
+        String pass = edtPassword.getText().toString().trim();
+        if (email.isEmpty()) {
             edtEmail.requestFocus();
             edtEmail.setError("Please enter email");
             return;
         }
-        if (pass.isEmpty())
-        {
+        if (pass.isEmpty()) {
             edtPassword.requestFocus();
             edtPassword.setError("Please enter password");
             return;
         }
 
-        Call<User> call = userService.getUserByEmail(email,pass);
+        Call<User> call = userService.getUserByEmail(email, pass);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     User user = response.body();
                     user.setEmail(email);
                     user.setPassWord(pass);
-                    Log.d("LOGINNNNN", "onResponse: " +user);
-                    if (user.getStatus() == -1 && user.getError() == 2)
-                    {
+                    Log.d("LOGINNNNN", "onResponse: " + user);
+                    if (user.getStatus() == -1 && user.getError() == 2) {
                         Toast.makeText(LoginActivity.this, "invalid Password", Toast.LENGTH_SHORT).show();
 
-                    }
-                    else if (user.getStatus() == -1 && user.getError() == 1)
-                    {
+                    } else if (user.getStatus() == -1 && user.getError() == 1) {
                         Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
 
-                    }
-                    else
-                    { ;
+                    } else {
+                        Log.d("FIRSTNAME", "onResponse: " + response.body().getInfo().getFirstName());
+
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                         SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("email", email);
                         editor.putString("pass", pass);
-//                        editor.putString("firstname", );
-//                        editor.putString("lastname", );
+                        editor.putString("firstname", response.body().getInfo().getFirstName());
+                        editor.putString("lastname", response.body().getInfo().getLastName());
+
                         editor.commit();
 
                         startActivity(intent);
