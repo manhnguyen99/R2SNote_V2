@@ -58,7 +58,7 @@ public class ChangePasswordFragment extends Fragment {
             String nPassAgain = newPassAgain.getText().toString().trim();
             if (cPass.isEmpty() || nPass.isEmpty() || nPassAgain.isEmpty()) {
                 Toast.makeText(getContext()
-                        , "Required Full Information", Toast.LENGTH_LONG).show();
+                        , "Required Full Information", Toast.LENGTH_SHORT).show();
             } else {
                 if (cPass.equals(MainActivity.PASS)) {
                     if (nPass.equals(nPassAgain)) {
@@ -69,8 +69,8 @@ public class ChangePasswordFragment extends Fragment {
                             public void onResponse(Call<User> call, Response<User> response) {
                                 if (response.body().getStatus() == 1) {
                                     Toast.makeText(getContext()
-                                            , "Change Password Successfull", Toast.LENGTH_LONG).show();
-                                    closeKeyBoard();
+                                            , "Change Password Successfull", Toast.LENGTH_SHORT).show();
+
                                     SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putString("pass", nPass);
@@ -86,14 +86,15 @@ public class ChangePasswordFragment extends Fragment {
 
                     } else {
                         Toast.makeText(getContext()
-                                , "New Password Again Incorrect", Toast.LENGTH_LONG).show();
+                                , "New Password Again Incorrect", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     Toast.makeText(getContext()
-                            , "Current Password Incorrect!", Toast.LENGTH_LONG).show();
+                            , "Current Password Incorrect!", Toast.LENGTH_SHORT).show();
                 }
             }
+            closeKeyBoard();
         });
         btnHome.setOnClickListener(view -> {
             replaceFragment(new HomeFragment());

@@ -107,10 +107,10 @@ public class CategoryFragment extends Fragment {
                     public void onResponse(Call<Result> call, Response<Result> response) {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext(), "Delete status successful!"
-                                    , Toast.LENGTH_LONG).show();
+                                    , Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "Unsuccessful!"
-                                    , Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Unsuccessful!Using"
+                                    , Toast.LENGTH_SHORT).show();
                         }
                         mViewModel.refreshData();
                     }

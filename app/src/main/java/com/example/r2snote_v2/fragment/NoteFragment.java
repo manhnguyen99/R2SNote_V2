@@ -108,15 +108,15 @@ public class NoteFragment extends Fragment {
                     public void onResponse(Call<Result> call, Response<Result> response) {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext(), "Delete note successful!"
-                                    , Toast.LENGTH_LONG).show();
+                                    , Toast.LENGTH_SHORT).show();
                             noteViewModel.refreshData();
                         } else {
                             if (response.body().getError() == 2) {
                                 Toast.makeText(getContext(), "Unsuccessful! Using"
-                                        , Toast.LENGTH_LONG).show();
+                                        , Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getContext(), "Unsuccessful!"
-                                        , Toast.LENGTH_LONG).show();
+                                        , Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -124,7 +124,7 @@ public class NoteFragment extends Fragment {
                     @Override
                     public void onFailure(Call<Result> call, Throwable t) {
                         Toast.makeText(getContext(), "Failed"
-                                , Toast.LENGTH_LONG).show();
+                                , Toast.LENGTH_SHORT).show();
                     }
                 });
             }
