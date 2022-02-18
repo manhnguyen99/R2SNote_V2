@@ -1,34 +1,40 @@
 package com.example.r2snote_v2.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.r2snote_v2.R;
 
-import com.example.r2snote_v2.model.PriorityData;
+import com.example.r2snote_v2.fragment.DialogAddNote;
+import com.example.r2snote_v2.fragment.PriorityCategoryStatusDialog;
+import com.example.r2snote_v2.model.PriorityCategoryStatusData;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
-public class PriorityAdapter extends RecyclerView.Adapter<PriorityAdapter.PriorityViewHolder>{
-    private List<PriorityData> priorityList;
+public class PriorityCategoryStatusAdapter extends RecyclerView.Adapter<PriorityCategoryStatusAdapter.PriorityViewHolder> {
+    private List<PriorityCategoryStatusData> dataList;
     private Context context;
 
-    public PriorityAdapter(Context context) {
+    public PriorityCategoryStatusAdapter(Context context) {
         this.context = context;
     }
-    public void setData(List<PriorityData> priorityList) {
-        this.priorityList = priorityList;
+
+    public void setData(List<PriorityCategoryStatusData> dataList) {
+        this.dataList = dataList;
         notifyDataSetChanged();
     }
 
-    public List<PriorityData> getData() {
-        return priorityList;
+    public List<PriorityCategoryStatusData> getData() {
+        return dataList;
     }
 
 
@@ -37,42 +43,65 @@ public class PriorityAdapter extends RecyclerView.Adapter<PriorityAdapter.Priori
     public PriorityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.list_priority_row, parent, false);
+        View view = layoutInflater.inflate(R.layout.list_priority_category_status_row, parent, false);
         return new PriorityViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PriorityViewHolder holder, int position) {
-        PriorityData priority = priorityList.get(position);
-        if (priority == null) {
+        PriorityCategoryStatusData data = dataList.get(position);
+        if (data == null) {
             return;
         }
-        holder.bind(priority);
+        holder.bind(data);
 
     }
 
     @Override
     public int getItemCount() {
-        if (priorityList == null) {
+        if (dataList == null) {
             return 0;
         }
-        return priorityList.size();
+        return dataList.size();
     }
 
-    public class PriorityViewHolder extends RecyclerView.ViewHolder{
-        private PriorityData priority;
-        private TextView priorityName, priorityCreatedDate, priorityEmail;
+    public class PriorityViewHolder extends RecyclerView.ViewHolder {
+        private PriorityCategoryStatusData data;
+        private TextView dataName, dataCreatedDate, dataEmail;
 
         public PriorityViewHolder(@NonNull View itemView) {
             super(itemView);
-            priorityName = itemView.findViewById(R.id.priority_name);
-            priorityCreatedDate = itemView.findViewById(R.id.priority_created_date);
+            dataName = itemView.findViewById(R.id.data_name);
+            dataCreatedDate = itemView.findViewById(R.id.data_created_date);
+            itemView.setOnLongClickListener(view -> {
+                new MaterialAlertDialogBuilder(view.getContext())
+                        .setTitle("Edit it?")
+                        .setMessage("Do you want edit Note " + data.getName())
+                        .setCancelable(false)
+                        .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .setPositiveButton("Edit", (dialogInterface, i) -> {
+                            Bundle args = new Bundle();
+                            args.putString("tab",data.getTab());
+                            args.putString("name", data.getName());
+                            args.putString("createddate", data.getCreatedDate());
+                            PriorityCategoryStatusDialog dialog = PriorityCategoryStatusDialog.newInstance();
+                            dialog.setArguments(args);
+                            dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), null);
+
+                        })
+                        .show();
+
+                return true;
+            });
         }
 
-        public void bind(PriorityData priority) {
-            this.priority = priority;
-            priorityName.setText(priority.getName());
-            priorityCreatedDate.setText(priority.getCreatedDate());
+
+        public void bind(PriorityCategoryStatusData data) {
+            this.data = data;
+            dataName.setText(data.getName());
+            dataCreatedDate.setText(data.getCreatedDate());
         }
     }
 }

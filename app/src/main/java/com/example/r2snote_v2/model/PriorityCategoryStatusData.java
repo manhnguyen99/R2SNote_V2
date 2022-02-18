@@ -1,17 +1,33 @@
 package com.example.r2snote_v2.model;
 
-public class PriorityData {
+public class PriorityCategoryStatusData {
+    private String tab;
     private String name;
     private String createdDate;
     private String email;
 
-    public PriorityData(String name, String createdDate, String email) {
+    public PriorityCategoryStatusData(String tab, String name, String createdDate, String email) {
+        this.tab = tab;
         this.name = name;
         this.createdDate = createdDate;
         this.email = email;
     }
 
-    public PriorityData() {
+    public PriorityCategoryStatusData() {
+    }
+
+    public PriorityCategoryStatusData(String name, String createdDate, String email) {
+        this.name = name;
+        this.createdDate = createdDate;
+        this.email = email;
+    }
+
+    public String getTab() {
+        return tab;
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
     }
 
     public String getName() {

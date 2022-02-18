@@ -7,44 +7,44 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.r2snote_v2.model.Result;
-import com.example.r2snote_v2.repository.PriorityRepository;
+import com.example.r2snote_v2.repository.PriorityCategoryStatusRepository;
 
 import retrofit2.Call;
 
-public class PriorityViewModel extends AndroidViewModel {
+public class PriorityCategoryStatusViewModel extends AndroidViewModel {
     private String tab;
-    private RefreshLiveData<Result> mPriorityList;
-    private PriorityRepository mPriorityRepository;
+    private RefreshLiveData<Result> mResult;
+    private PriorityCategoryStatusRepository mRepository;
 
-    public PriorityViewModel(@NonNull Application application) {
+    public PriorityCategoryStatusViewModel(@NonNull Application application) {
         super(application);
         init(tab);
     }
 
 
     public void init(String tab) {
-        mPriorityRepository = new PriorityRepository();
-        mPriorityList = mPriorityRepository.loadAllPriority(tab);
+        mRepository = new PriorityCategoryStatusRepository();
+        mResult = mRepository.loadAllData(tab);
     }
 
     public void refreshData() {
-        mPriorityList.refresh();
+        mResult.refresh();
     }
 
-    public LiveData<Result> getPriorityList() {
-        return mPriorityList;
+    public LiveData<Result> getDataList() {
+        return mResult;
     }
 
 
-    public Call<Result> updatePriority(String tab, String email, String name, String nname) {
-        return mPriorityRepository.editPriority(tab, email, name, nname);
+    public Call<Result> updateData(String tab, String email, String name, String nname) {
+        return mRepository.editData(tab, email, name, nname);
     }
 
-    public Call<Result> addPriority(String tab, String email, String name) {
-        return mPriorityRepository.createPriority(tab, email, name);
+    public Call<Result> addData(String tab, String email, String name) {
+        return mRepository.createData(tab, email, name);
     }
 
-    public Call<Result> deletePriority(String tab, String email, String name) {
-        return mPriorityRepository.removePriority(tab, email, name);
+    public Call<Result> deleteData(String tab, String email, String name) {
+        return mRepository.removeData(tab, email, name);
     }
 }

@@ -26,10 +26,25 @@
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/fragment_edit_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/fragment_home.xml" value="0.20416666666666666" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/fragment_note.xml" value="0.1" />
+        <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/fragment_priority.xml" value="0.20416666666666666" />
+        <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/item_priority.xml" value="0.20416666666666666" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/layout_header_navigation.xml" value="0.1" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/layout/list_note_row.xml" value="0.22" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/menu/menu_navigation_drawer.xml" value="0.1" />
         <entry key="..\:/minh1/Documents/R2SNote_V2/app/src/main/res/menu/menu_option.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/custom_dialog_note.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_category.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_change_password.xml" value="0.1" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_note.xml" value="0.1" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_priority.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/fragment_status.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/item_priority.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/list_note_row.xml" value="0.1" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/list_priority_category_status_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/list_priority_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/minhl/Documents/R2SNote_V2/app/src/main/res/layout/priority_category_status_dialog.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

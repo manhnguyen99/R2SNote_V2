@@ -9,28 +9,33 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.fragment.CategoryFragment;
 import com.example.r2snote_v2.fragment.ChangePasswordFragment;
+import com.example.r2snote_v2.fragment.DialogAddNote;
 import com.example.r2snote_v2.fragment.EditProfileFragment;
 import com.example.r2snote_v2.fragment.HomeFragment;
 import com.example.r2snote_v2.fragment.NoteFragment;
 import com.example.r2snote_v2.fragment.PriorityFragment;
 import com.example.r2snote_v2.fragment.StatusFragment;
 import com.example.r2snote_v2.model.User;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
+    public static Toolbar toolbar;
     private NavigationView navigationView;
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_CATEGORY = 1;
@@ -38,20 +43,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_STATUS = 3;
     private static final int FRAGMENT_NOTE = 4;
     private int currentFragment = FRAGMENT_HOME;
-    public static User userLogin;
+    public static String EMAIL, PASS, FIRSTNAME, LASTNAME;
+    public static TextView textView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
+        LASTNAME = sharedPref.getString("lastname", "");
+        FIRSTNAME = sharedPref.getString("firstname", "");
+        EMAIL = sharedPref.getString("email", "");
+        PASS = sharedPref.getString("pass", "");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         intUi();
 
     }
 
     private void intUi() {
-        userLogin = (User) getIntent().getExtras().get("user");
+
+
+
         drawerLayout = findViewById(R.id.drawer_layout);
 
         //navigation drawer
@@ -68,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         replaceFragment(new HomeFragment());
         navigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         View headerView = navigationView.getHeaderView(0);
-        TextView textView = headerView.findViewById(R.id.email_header);
-        textView.setText(userLogin.getEmail());
+        textView = headerView.findViewById(R.id.email_header);
+        textView.setText(EMAIL);
 
     }
 
@@ -149,7 +161,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.option_logout:
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Log Out?")
+                        .setMessage("Are you sure?")
+                        .setCancelable(false)
+                        .setNegativeButton("No", (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .setPositiveButton("Yes", (dialogInterface, i) -> {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        })
+                        .show();
                 break;
         }
         return super.onOptionsItemSelected(item);

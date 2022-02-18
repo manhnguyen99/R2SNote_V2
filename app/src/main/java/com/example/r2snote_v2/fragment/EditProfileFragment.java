@@ -1,5 +1,7 @@
 package com.example.r2snote_v2.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.model.User;
@@ -23,24 +26,24 @@ import retrofit2.Response;
 
 public class EditProfileFragment extends Fragment {
     private EditText edtFirstName, edtLastName, edtnEmail;
-    private Button btnUpdate;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private Button btnUpdate, btnHome;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
-        edtFirstName = view.findViewById(R.id.edit_firstname);
-        edtLastName = view.findViewById(R.id.edit_lastname);
-        edtnEmail = view.findViewById(R.id.edit_nemail);
-        btnUpdate = view.findViewById(R.id.btn_update_profile);
 
+        intUi(view);
+        onEventClick();
+
+        return view;
+    }
+
+    private void onEventClick() {
         btnUpdate.setOnClickListener(view1 -> {
-            String email = MainActivity.userLogin.getEmail();
+            SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+            MainActivity.EMAIL = sharedPref.getString("email", "");
+
             String lastName = edtFirstName.getText().toString().trim();
             String firstName = edtLastName.getText().toString().trim();
             String nEmail = edtnEmail.getText().toString().trim();
@@ -48,13 +51,24 @@ public class EditProfileFragment extends Fragment {
                 Toast.makeText(getContext()
                         , "Required Full Information", Toast.LENGTH_LONG).show();
             } else {
-                Call<User> userCall = NoteRepository.getUserService().editProfile(email, nEmail, firstName, lastName);
+                Call<User> userCall = NoteRepository.getUserService().editProfile(MainActivity.EMAIL, nEmail, firstName, lastName);
                 userCall.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext()
-                                    , "Change Password Successfull", Toast.LENGTH_LONG).show();
+                                    , "Change Profile Successfull", Toast.LENGTH_LONG).show();
+                            MainActivity.textView.setText(nEmail);
+                            SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("email", nEmail);
+//                            editor.putString("pass", pass);
+                            editor.putString("firstname", firstName);
+                            editor.putString("lastname", lastName);
+                            editor.commit();
+                        } else {
+                            Toast.makeText(getContext()
+                                    , "Unuccessfull", Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -67,7 +81,28 @@ public class EditProfileFragment extends Fragment {
 
 
         });
-
-        return view;
+        btnHome.setOnClickListener(view -> {
+            replaceFragment(new HomeFragment());
+            MainActivity.toolbar.setTitle("Home");
+        });
     }
+
+    private void intUi(View view) {
+        edtFirstName = view.findViewById(R.id.edit_firstname);
+        edtLastName = view.findViewById(R.id.edit_lastname);
+        edtnEmail = view.findViewById(R.id.edit_nemail);
+        btnUpdate = view.findViewById(R.id.btn_update_profile);
+        btnHome = view.findViewById(R.id.btn_edit_home);
+
+        edtLastName.setText(MainActivity.LASTNAME);
+        edtFirstName.setText(MainActivity.FIRSTNAME);
+        edtnEmail.setText(MainActivity.EMAIL);
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
+    }
+
 }

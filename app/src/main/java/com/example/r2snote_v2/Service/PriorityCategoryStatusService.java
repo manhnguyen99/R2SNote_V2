@@ -6,24 +6,28 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface PriorityService {
-    @GET("get?tab=Priority&email")
-    Call<Result> getAllPriority(
+public interface PriorityCategoryStatusService {
+    @GET("get?tab&email")
+    Call<Result> getAllData(
+            @Query("tab") String tab,
             @Query("email") String email);
 
-    @GET("add?tab=Priority&email&name")
-    Call<Result> postPriority(
+    @GET("add?tab&email&name")
+    Call<Result> postData(
+            @Query("tab") String tab,
             @Query("email") String email,
             @Query("name") String name);
 
-    @GET("update?tab=Priority&email&name&nname")
-    Call<Result> updatePriority(
+    @GET("update?tab&email&name&nname")
+    Call<Result> updateData(
+            @Query("tab") String tab,
             @Query("email") String email,
             @Query("name") String name,
             @Query("nname") String nname);
 
-    @GET("del?tab=Priority&email&name")
-    Call<Result> deletePriority(
+    @GET("del?tab&email&name")
+    Call<Result> deleteData(
+            @Query("tab") String tab,
             @Query("email") String email,
             @Query("name") String name);
 

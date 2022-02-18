@@ -1,32 +1,23 @@
 package com.example.r2snote_v2.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.fragment.DialogAddNote;
-import com.example.r2snote_v2.model.Note;
 import com.example.r2snote_v2.model.NoteData;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
     private List<NoteData> notes;
@@ -122,9 +113,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             noteStatus.setText(note.getStatus());
             notePlanDate.setText(note.getPlaneDate());
             noteCreateDate.setText(note.getCreateDate());
-//            noteEmail.setText(note.getEmail());
-
-
         }
 
 

@@ -1,5 +1,7 @@
 package com.example.r2snote_v2.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.r2snote_v2.Service.APIClient;
@@ -12,16 +14,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PriorityRepository {
+public class PriorityCategoryStatusRepository {
     private PriorityCategoryStatusService mPriorityService;
 
-    public PriorityRepository() {
+    public PriorityCategoryStatusRepository() {
         mPriorityService = APIClient.getClient().create(PriorityCategoryStatusService.class);
     }
 
-    public RefreshLiveData<Result> loadAllPriority(String tab) {
+    public RefreshLiveData<Result> loadAllData(String tab) {
         final RefreshLiveData<Result> liveData = new RefreshLiveData<>((callback) -> {
-            mPriorityService.getAllData(tab, MainActivity.userLogin.getEmail()).enqueue(new Callback<Result>() {
+            mPriorityService.getAllData(tab, MainActivity.EMAIL).enqueue(new Callback<Result>() {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     if (response.body().getStatus() == 1) {
@@ -41,15 +43,15 @@ public class PriorityRepository {
         return liveData;
     }
 
-    public Call<Result> editPriority(String tab, String email, String name, String nname) {
+    public Call<Result> editData(String tab, String email, String name, String nname) {
         return mPriorityService.updateData(tab, email, name, nname);
     }
 
-    public Call<Result> createPriority(String tab, String email, String name) {
+    public Call<Result> createData(String tab, String email, String name) {
         return mPriorityService.postData(tab, email, name);
     }
 
-    public Call<Result> removePriority(String tab, String email, String name) {
+    public Call<Result> removeData(String tab, String email, String name) {
         return mPriorityService.deleteData(tab, email, name);
     }
 }

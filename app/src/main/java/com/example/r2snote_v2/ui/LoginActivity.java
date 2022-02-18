@@ -1,6 +1,8 @@
 package com.example.r2snote_v2.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -32,27 +34,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initUI();
-//        getListUser();
-        userService = NoteRepository.getUserService();
-
         initEvent();
     }
 
-//
-//    private void getListUser() {
-////        mNoteViewModel.getAllUser().enqueue(new Callback<ArrayList<User>>() {
-////            @Override
-////            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-////                 response.body();
-////            }
-////            @Override
-////            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
-////                Log.e("TAG", "onFailure: " + t.getMessage() );
-////            }
-////        });
-//
-//
-//    }
 
     private void initEvent() {
         btnLogin.setOnClickListener(view -> {
@@ -102,12 +86,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                     else
-                    {
-                        Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                    { ;
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("user", user);
-                        intent.putExtras(bundle);
+
+                        SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("email", email);
+                        editor.putString("pass", pass);
+//                        editor.putString("firstname", );
+//                        editor.putString("lastname", );
+                        editor.commit();
+
                         startActivity(intent);
 
                     }
@@ -127,5 +116,6 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
         txtSignUp = findViewById(R.id.txtCreateAccount);
+        userService = NoteRepository.getUserService();
     }
 }
