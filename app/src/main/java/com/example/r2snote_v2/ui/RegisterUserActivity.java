@@ -90,6 +90,8 @@ public class RegisterUserActivity extends AppCompatActivity {
                         Toast.makeText(RegisterUserActivity.this, "Signup successfully", Toast.LENGTH_SHORT).show();
                         SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("email", email);
+                        editor.putString("pass", pass);
                         editor.putString("firstname", fname);
                         editor.putString("lastname", lname);
                         editor.commit();
