@@ -97,7 +97,6 @@ public class PriorityCategoryStatusAdapter extends RecyclerView.Adapter<Priority
             });
         }
 
-
         public void bind(PriorityCategoryStatusData data) {
             this.data = data;
             dataName.setText(data.getName());

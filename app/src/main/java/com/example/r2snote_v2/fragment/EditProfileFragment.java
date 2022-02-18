@@ -41,11 +41,9 @@ public class EditProfileFragment extends Fragment {
 
     private void onEventClick() {
         btnUpdate.setOnClickListener(view1 -> {
-            SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
-            MainActivity.EMAIL = sharedPref.getString("email", "");
 
-            String lastName = edtFirstName.getText().toString().trim();
-            String firstName = edtLastName.getText().toString().trim();
+            String lastName = edtLastName.getText().toString().trim();
+            String firstName = edtFirstName.getText().toString().trim();
             String nEmail = edtnEmail.getText().toString().trim();
             if (lastName.isEmpty() || firstName.isEmpty() || nEmail.isEmpty()) {
                 Toast.makeText(getContext()
@@ -66,6 +64,10 @@ public class EditProfileFragment extends Fragment {
                             editor.putString("firstname", firstName);
                             editor.putString("lastname", lastName);
                             editor.commit();
+
+                            edtLastName.setText(lastName);
+                            edtFirstName.setText(firstName);
+                            edtnEmail.setText(nEmail);
                         } else {
                             Toast.makeText(getContext()
                                     , "Unuccessfull", Toast.LENGTH_LONG).show();
@@ -88,6 +90,11 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void intUi(View view) {
+        SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        MainActivity.EMAIL = sharedPref.getString("email", "");
+        MainActivity.LASTNAME = sharedPref.getString("lastname", "");
+        MainActivity.FIRSTNAME = sharedPref.getString("firstname", "");
+
         edtFirstName = view.findViewById(R.id.edit_firstname);
         edtLastName = view.findViewById(R.id.edit_lastname);
         edtnEmail = view.findViewById(R.id.edit_nemail);
