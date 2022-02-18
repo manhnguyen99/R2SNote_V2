@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class EditProfileFragment extends Fragment {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext()
                                     , "Change Profile Successfull", Toast.LENGTH_LONG).show();
+                            closeKeyBoard();
                             MainActivity.textView.setText(nEmail);
                             SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -110,6 +112,14 @@ public class EditProfileFragment extends Fragment {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void closeKeyBoard(){
+        View view = getActivity().getCurrentFocus();
+        if(view!=null){
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
     }
 
 }

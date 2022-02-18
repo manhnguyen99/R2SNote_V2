@@ -31,6 +31,9 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText edtEmail, edtPassWord, edtFname, edtLname;
     private Button btnCancel, btnSignUp;
     private UserService userService;
+    public long backPressedTime;
+    public Toast backToast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,4 +124,20 @@ public class RegisterUserActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
         btnCancel = findViewById(R.id.btnCancel);
     }
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press Back again to Exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
+    }
+
 }
