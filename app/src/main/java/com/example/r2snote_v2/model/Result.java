@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Note{
+public class Note {
 
     private long status;
     private long error;
