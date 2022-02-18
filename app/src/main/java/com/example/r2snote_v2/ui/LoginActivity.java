@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             super.onBackPressed();
             return;
         } else {
-            backToast = Toast.makeText(getBaseContext(), "Nhấn 1 lần nữa để thoát", Toast.LENGTH_SHORT);
+            backToast = Toast.makeText(getBaseContext(), "Press Back again to Exit", Toast.LENGTH_SHORT);
             backToast.show();
         }
 
