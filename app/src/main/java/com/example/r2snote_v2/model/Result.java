@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Note{
+public class Result {
 
     private long status;
     private long error;
     private List<List<String>> data;
 
 
-    public Note(long status, long error, List<List<String>> data) {
+    public Result(long status, long error, List<List<String>> data) {
         this.status = status;
         this.error = error;
         this.data = data;

@@ -1,7 +1,8 @@
 package com.example.r2snote_v2.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -30,6 +31,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     private EditText edtEmail, edtPassWord, edtFname, edtLname;
     private Button btnCancel, btnSignUp;
     private UserService userService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         initUI();
         initEvent();
     }
+
     private void initEvent() {
         userService = UserRepository.getUserService();
 
@@ -53,57 +56,59 @@ public class RegisterUserActivity extends AppCompatActivity {
 
         String email = edtEmail.getText().toString().trim();
         String pass = edtPassWord.getText().toString().trim();
-        String fname= edtFname.getText().toString().trim();
+        String fname = edtFname.getText().toString().trim();
         String lname = edtLname.getText().toString().trim();
 
-        if (email.isEmpty())
-        {
+        if (email.isEmpty()) {
             edtEmail.requestFocus();
             edtEmail.setError("Please enter email");
             return;
         }
-        if (pass.isEmpty())
-        {
+        if (pass.isEmpty()) {
             edtPassWord.requestFocus();
             edtPassWord.setError("Please enter password");
             return;
         }
-        if (fname.isEmpty())
-        {
+        if (fname.isEmpty()) {
             edtFname.requestFocus();
             edtFname.setError("Please enter First name");
             return;
         }
-        if (lname.isEmpty())
-        {
+        if (lname.isEmpty()) {
             edtLname.requestFocus();
             edtLname.setError("Please enter Last name");
             return;
         }
 
-//        User user = new User(email, pass, fname, lname);
 
         Call<User> call = userService.createNewUser(email, pass, fname, lname);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
 
                     User user = response.body();
-                    if (user.getStatus() == -1 && user.getError() == 2)
-                    {
+                    if (user.getStatus() == -1 && user.getError() == 2) {
                         Toast.makeText(RegisterUserActivity.this, "Email is used", Toast.LENGTH_SHORT).show();
 
                     }
                     if (user.getStatus() == 1) {
                         Toast.makeText(RegisterUserActivity.this, "Signup successfully", Toast.LENGTH_SHORT).show();
+                        SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("email", email);
+                        editor.putString("pass", pass);
+                        editor.putString("firstname", fname);
+                        editor.putString("lastname", lname);
+                        editor.commit();
                         finish();
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.e("TAG", "onFailure: " + t.getMessage() );
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

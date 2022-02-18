@@ -1,6 +1,5 @@
 package com.example.r2snote_v2.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,10 +18,8 @@ import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.ViewModel.CommunicateViewModel;
 import com.example.r2snote_v2.ViewModel.NoteViewModel;
 import com.example.r2snote_v2.adapter.NoteAdapter;
-import com.example.r2snote_v2.model.Note;
+import com.example.r2snote_v2.model.Result;
 import com.example.r2snote_v2.model.NoteData;
-import com.example.r2snote_v2.repository.NoteRepository;
-import com.example.r2snote_v2.ui.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -46,13 +42,16 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_note, container, false);
-
         intUi(view);
-//        getDataNote();
+        onEventClick();
+        onSwipeItemRecyclerView();
+        return view;
+    }
+
+    private void onEventClick() {
         btnAdd.setOnClickListener(view1 -> {
             showCustomDialog();
         });
-        return view;
     }
 
     private void intUi(View view) {
@@ -86,7 +85,9 @@ public class NoteFragment extends Fragment {
             noteAdapter.setData(noteList);
 
         });
+    }
 
+    private void onSwipeItemRecyclerView() {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -101,37 +102,29 @@ public class NoteFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 List<NoteData> tasks = noteAdapter.getData();
                 NoteData noteData = tasks.get(position);
-//                Call<Note> noteCall = NoteRepository.getNoteService().deleteNote(noteData.getEmail(),noteData.getName());
-//                noteCall.enqueue(new Callback<Note>() {
-//                    @Override
-//                    public void onResponse(Call<Note> call, Response<Note> response) {
-//                        if (response.body().getStatus()==1) {
-//                            Toast.makeText(getContext(), "Delete note successful!"
-//                                    ,Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Note> call, Throwable t) {
-//
-//                    }
-//                });
-                noteViewModel.deleteNote(noteData.getEmail(), noteData.getName()).enqueue(new Callback<Note>() {
+
+                noteViewModel.deleteNote(noteData.getEmail(), noteData.getName()).enqueue(new Callback<Result>() {
                     @Override
-                    public void onResponse(Call<Note> call, Response<Note> response) {
+                    public void onResponse(Call<Result> call, Response<Result> response) {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext(), "Delete note successful!"
                                     , Toast.LENGTH_LONG).show();
                             noteViewModel.refreshData();
                         } else {
-                            Toast.makeText(getContext(), "Delete note Unsuccessful!"
-                                    , Toast.LENGTH_LONG).show();
+                            if (response.body().getError() == 2) {
+                                Toast.makeText(getContext(), "Unsuccessful! Using"
+                                        , Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getContext(), "Unsuccessful!"
+                                        , Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Note> call, Throwable t) {
-
+                    public void onFailure(Call<Result> call, Throwable t) {
+                        Toast.makeText(getContext(), "Failed"
+                                , Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -140,35 +133,8 @@ public class NoteFragment extends Fragment {
     }
 
     private void showCustomDialog() {
-        DialogAddNote editNameDialogFragment = DialogAddNote.newInstance();
-        editNameDialogFragment.show(getChildFragmentManager(), null);
-    }
-
-    private void getDataNote() {
-        Call<Note> call = NoteRepository.getNoteService().getAllNotes(MainActivity.userLogin.getEmail());
-        call.enqueue(new Callback<Note>() {
-            @Override
-            public void onResponse(Call<Note> call, Response<Note> response) {
-                if (response.body().getStatus() == 1) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        noteList.add(new NoteData(response.body().getData().get(i).get(0),
-                                response.body().getData().get(i).get(1),
-                                response.body().getData().get(i).get(2),
-                                response.body().getData().get(i).get(3),
-                                response.body().getData().get(i).get(4),
-                                response.body().getData().get(i).get(5),
-                                response.body().getData().get(i).get(6)));
-                    }
-                    noteAdapter.setData(noteList);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Note> call, Throwable t) {
-
-            }
-        });
+        DialogAddNote dialogAddNote = DialogAddNote.newInstance();
+        dialogAddNote.show(getChildFragmentManager(), null);
     }
 
     @Override

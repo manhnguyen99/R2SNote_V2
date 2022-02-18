@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.r2snote_v2.R;
 import com.example.r2snote_v2.model.User;
@@ -26,7 +27,7 @@ import retrofit2.Response;
 
 public class ChangePasswordFragment extends Fragment {
     private EditText currentPass, newPass, newPassAgain;
-    private Button btnChange;
+    private Button btnChange, btnHome;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,14 +38,20 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
-        currentPass = view.findViewById(R.id.change_current_pass);
-        newPass = view.findViewById(R.id.change_new_pass);
-        newPassAgain = view.findViewById(R.id.change_new_pass_again);
-        btnChange = view.findViewById(R.id.btn_change);
 
+        intUi(view);
+        onEventClick();
+        return view;
+    }
+
+    private void onEventClick() {
         btnChange.setOnClickListener(view1 -> {
-            String email = MainActivity.userLogin.getEmail();
-            String pass = MainActivity.userLogin.getPassWord().toString().trim();
+            SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+//            String getLastName = sharedPref.getString("lastname", "");
+//            String getFistName = sharedPref.getString("firstname", "");
+            MainActivity.EMAIL = sharedPref.getString("email", "");
+            MainActivity.PASS = sharedPref.getString("pass", "");
+
             String cPass = currentPass.getText().toString().trim();
             String nPass = newPass.getText().toString().trim();
             String nPassAgain = newPassAgain.getText().toString().trim();
@@ -52,25 +59,30 @@ public class ChangePasswordFragment extends Fragment {
                 Toast.makeText(getContext()
                         , "Required Full Information", Toast.LENGTH_LONG).show();
             } else {
-                if (cPass.equals(pass)) {
+                if (cPass.equals(MainActivity.PASS)) {
                     if (nPass.equals(nPassAgain)) {
 
-                        Call<User> userCall = NoteRepository.getUserService().changePassword(email,pass,nPass);
+                        Call<User> userCall = NoteRepository.getUserService().changePassword(MainActivity.EMAIL, MainActivity.PASS, nPass);
                         userCall.enqueue(new Callback<User>() {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
-                                if (response.body().getStatus()==1){
+                                if (response.body().getStatus() == 1) {
                                     Toast.makeText(getContext()
                                             , "Change Password Successfull", Toast.LENGTH_LONG).show();
+                                    SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("pass", nPass);
+                                    editor.commit();
                                 }
                             }
+
                             @Override
                             public void onFailure(Call<User> call, Throwable t) {
 
                             }
                         });
 
-                    }else {
+                    } else {
                         Toast.makeText(getContext()
                                 , "New Password Again Incorrect", Toast.LENGTH_LONG).show();
                     }
@@ -81,12 +93,23 @@ public class ChangePasswordFragment extends Fragment {
                 }
             }
         });
+        btnHome.setOnClickListener(view -> {
+            replaceFragment(new HomeFragment());
+            MainActivity.toolbar.setTitle("Home");
+        });
+    }
 
+    private void intUi(View view) {
+        currentPass = view.findViewById(R.id.change_current_pass);
+        newPass = view.findViewById(R.id.change_new_pass);
+        newPassAgain = view.findViewById(R.id.change_new_pass_again);
+        btnChange = view.findViewById(R.id.btn_change);
+        btnHome = view.findViewById(R.id.btn_change_home);
+    }
 
-//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
-//        String currentPassword = sharedPreferences.getString("currentpassword", "");
-
-
-        return view;
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment);
+        fragmentTransaction.commit();
     }
 }

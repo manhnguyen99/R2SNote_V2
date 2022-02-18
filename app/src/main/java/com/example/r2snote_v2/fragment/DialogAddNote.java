@@ -2,7 +2,8 @@ package com.example.r2snote_v2.fragment;
 
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,14 +24,18 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.r2snote_v2.R;
+import com.example.r2snote_v2.Service.PriorityCategoryStatusService;
 import com.example.r2snote_v2.ViewModel.CommunicateViewModel;
 import com.example.r2snote_v2.ViewModel.NoteViewModel;
-import com.example.r2snote_v2.model.Note;
+import com.example.r2snote_v2.model.PriorityCategoryStatusData;
+import com.example.r2snote_v2.model.Result;
 import com.example.r2snote_v2.model.NoteData;
 import com.example.r2snote_v2.repository.NoteRepository;
 import com.example.r2snote_v2.ui.MainActivity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,10 +65,10 @@ public class DialogAddNote extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.custom_dialog_note, container, false);
-        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
+
         intUi(view);
         setSpinner();
-        eventAddNote();
+        onEventClick();
         eventDatePick();
         getNoteData();
         setCancelable(false);
@@ -95,23 +100,18 @@ public class DialogAddNote extends DialogFragment {
     }
 
     private void setSpinner() {
-        String[] priority = {"Medium", "Slow", "High"};
-        ArrayAdapter<String> adapterPriority = new ArrayAdapter<String>(getContext(),
-                R.layout.support_simple_spinner_dropdown_item, priority);
 
-        String[] category = {"Learn", "Working", "Relex", "Study"};
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(getContext(),
-                R.layout.support_simple_spinner_dropdown_item, category);
 
-        String[] status = {"Doing", "Processing", "Pending"};
-        ArrayAdapter<String> adapterStatus = new ArrayAdapter<String>(getContext(),
-                R.layout.support_simple_spinner_dropdown_item, status);
-        sCategory.setAdapter(adapterCategory);
-        sStatus.setAdapter(adapterStatus);
-        sPriority.setAdapter(adapterPriority);
+        getDataSpinner("Priority", MainActivity.EMAIL,sPriority);
+        getDataSpinner("Category", MainActivity.EMAIL,sCategory);
+        getDataSpinner("Status", MainActivity.EMAIL,sStatus);
     }
 
     private void intUi(View view) {
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+        MainActivity.EMAIL = sharedPref.getString("email", "");
+
         noteName = view.findViewById(R.id.edt_note_name);
         sCategory = view.findViewById(R.id.spinner_category);
         sPriority = view.findViewById(R.id.spinner_priority);
@@ -120,12 +120,17 @@ public class DialogAddNote extends DialogFragment {
 
         btnAdd = view.findViewById(R.id.btn_add_dialog);
         btnClose = view.findViewById(R.id.btn_close_dialog);
+
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         communicateViewModel = new ViewModelProvider(getActivity()).get(CommunicateViewModel.class);
 
     }
 
-    private void eventAddNote() {
+    private void onEventClick() {
         btnAdd.setOnClickListener(view1 -> {
+            SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
+            MainActivity.EMAIL = sharedPref.getString("email", "");
+
             String name = noteName.getText().toString().trim();
             String priority = String.valueOf(sPriority.getSelectedItem());
             String category = String.valueOf(sCategory.getSelectedItem());
@@ -137,10 +142,10 @@ public class DialogAddNote extends DialogFragment {
                             , "Required Full Information", Toast.LENGTH_LONG).show();
                 } else {
 
-                    Call<Note> noteCall = noteViewModel.addNote(MainActivity.userLogin.getEmail(), name, priority, category, status, planDate);
-                    noteCall.enqueue(new Callback<Note>() {
+                    Call<Result> noteCall = noteViewModel.addNote(MainActivity.EMAIL, name, priority, category, status, planDate);
+                    noteCall.enqueue(new Callback<Result>() {
                         @Override
-                        public void onResponse(Call<Note> call, Response<Note> response) {
+                        public void onResponse(Call<Result> call, Response<Result> response) {
                             if (response.body().getStatus() == 1) {
                                 Toast.makeText(getContext()
                                         , "Add Note Successfully", Toast.LENGTH_LONG).show();
@@ -153,87 +158,45 @@ public class DialogAddNote extends DialogFragment {
                                             , "Note's Name was existed", Toast.LENGTH_LONG).show();
                                 } else
                                     Toast.makeText(getContext()
-                                            , "Add Note UnSuccessfully", Toast.LENGTH_LONG).show();
+                                            , "UnSuccessfully", Toast.LENGTH_LONG).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Note> call, Throwable t) {
-
+                        public void onFailure(Call<Result> call, Throwable t) {
+                            Toast.makeText(getContext()
+                                    , "Failed", Toast.LENGTH_LONG).show();
                         }
                     });
-//                    Call<Note> noteCall = NoteRepository.getNoteService().postNote("kylh84@gmail.com", name, priority, category, status, planDate);
-//                    noteCall.enqueue(new Callback<Note>() {
-//                        @Override
-//                        public void onResponse(Call<Note> call, Response<Note> response) {
-//                            if (response.body().getStatus() == 1) {
-//                                Toast.makeText(getContext()
-//                                        , "Add Note Successfully", Toast.LENGTH_LONG).show();
-//                                dismiss();
-//
-//                            } else if (response.body().getStatus() == -1) {
-//                                if (response.body().getError() == 2) {
-//                                    Toast.makeText(getContext()
-//                                            , "Note's Name was existed", Toast.LENGTH_LONG).show();
-//                                } else
-//                                    Toast.makeText(getContext()
-//                                            , "Add Note UnSuccessfully", Toast.LENGTH_LONG).show();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Note> call, Throwable t) {
-//                            Toast.makeText(getContext()
-//                                    , "Add Note UnSuccessfully", Toast.LENGTH_LONG).show();
-//                        }
-//                    });
+
                 }
             } else {
                 if (noteName.getText().toString().trim().isEmpty() || textDatePick.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getContext()
                             , "Required Full Information", Toast.LENGTH_LONG).show();
                 } else {
-                    Call<Note> noteCall = noteViewModel.updateNote(emailNote, nameNote, noteName.getText().toString().trim(), priorityNote, categoryNote, statusNote, plandateNote);
-                    noteCall.enqueue(new Callback<Note>() {
+                    Call<Result> noteCall = noteViewModel.updateNote(emailNote, nameNote, noteName.getText().toString().trim(), priorityNote, categoryNote, statusNote, plandateNote);
+                    noteCall.enqueue(new Callback<Result>() {
                         @Override
-                        public void onResponse(Call<Note> call, Response<Note> response) {
+                        public void onResponse(Call<Result> call, Response<Result> response) {
                             if (response.body().getStatus() == 1) {
-                                Toast.makeText(getContext(), "Update user successful!"
+                                Toast.makeText(getContext(), "Update Note Successful!"
                                         , Toast.LENGTH_LONG).show();
-//                                getActivity().startActivityForResult(getActivity().getIntent(), 10);
                                 communicateViewModel.makeChanges();
                                 dismiss();
                             } else {
-                                Toast.makeText(getContext(), "Update user Unsuccessful!"
+                                Toast.makeText(getContext(), "Unsuccessful!"
                                         , Toast.LENGTH_LONG).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Note> call, Throwable t) {
-
+                        public void onFailure(Call<Result> call, Throwable t) {
+                            Toast.makeText(getContext()
+                                    , "Failed", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
-//                Call<Note> noteCall = NoteRepository.getNoteService().updateNote("kylh84@gmail.com", nameNote, "minh", priorityNote, categoryNote, statusNote, plandateNote);
-//                noteCall.enqueue(new Callback<Note>() {
-//                    @Override
-//                    public void onResponse(Call<Note> call, Response<Note> response) {
-//                        if (response.body().getStatus()==1) {
-//                            Toast.makeText(getContext(), "Update user successful!"
-//                                    , Toast.LENGTH_LONG).show();
-//                            dismiss();
-//                        } else {
-//                            Toast.makeText(getContext(), "Update user Unsuccessful!"
-//                                    , Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Note> call, Throwable t) {
-//
-//                    }
-//                });
             }
         });
 
@@ -244,14 +207,8 @@ public class DialogAddNote extends DialogFragment {
 
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     private void getNoteData() {
         Bundle mArgs = getArguments();
-
         if (mArgs != null) {
             nameNote = mArgs.getString("name");
             priorityNote = mArgs.getString("priority");
@@ -262,10 +219,32 @@ public class DialogAddNote extends DialogFragment {
             noteName.setText(nameNote);
             textDatePick.setText(plandateNote);
             btnAdd.setText("Edit");
-
         }
     }
 
+    private void getDataSpinner(String tab, String email, Spinner spinner) {
+        List<String> listData = new ArrayList<>();
+        Call<Result> statusSpinner = NoteRepository.getDataService().getAllData(tab, email);
+        statusSpinner.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                if (response.body().getStatus() == 1) {
+                    for (int i = 0; i < response.body().getData().size(); i++) {
+                        listData.add(response.body().getData().get(i).get(0));
+                    }
+                    ArrayAdapter adapterSpiner = new ArrayAdapter<>(getContext(),
+                            R.layout.support_simple_spinner_dropdown_item, listData);
+                    spinner.setAdapter(adapterSpiner);
+                } else {
+                    Toast.makeText(getContext(), "Get Data Spinner Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public void onResume() {

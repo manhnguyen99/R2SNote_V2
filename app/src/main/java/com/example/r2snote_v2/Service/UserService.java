@@ -26,7 +26,7 @@ public interface UserService {
                               @Query("pass") String pass,
                               @Query("npass") String npass);
 
-    @GET("update?tab=Profile&email&nemailpass&firstname&lastname")
+    @GET("update?tab=Profile&email&nemail&firstname&lastname")
     Call<User> editProfile(@Query("email") String email,
                              @Query("nemail") String nemail,
                              @Query("firstname") String firstName,

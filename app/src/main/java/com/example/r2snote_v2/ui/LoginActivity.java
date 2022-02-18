@@ -1,6 +1,8 @@
 package com.example.r2snote_v2.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,28 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initUI();
-
-        userService = UserRepository.getUserService();
-
-
         initEvent();
     }
 
-//
-//    private void getListUser() {
-////        mNoteViewModel.getAllUser().enqueue(new Callback<ArrayList<User>>() {
-////            @Override
-////            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-////                 response.body();
-////            }
-////            @Override
-////            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
-////                Log.e("TAG", "onFailure: " + t.getMessage() );
-////            }
-////        });
-//
-//
-//    }
 
     private void initEvent() {
         btnLogin.setOnClickListener(view -> {
@@ -83,48 +66,48 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser() {
         String email = edtEmail.getText().toString().trim();
-        String pass  = edtPassword.getText().toString().trim();
-        if (email.isEmpty())
-        {
+        String pass = edtPassword.getText().toString().trim();
+        if (email.isEmpty()) {
             edtEmail.requestFocus();
             edtEmail.setError("Please enter email");
             return;
         }
-        if (pass.isEmpty())
-        {
+        if (pass.isEmpty()) {
             edtPassword.requestFocus();
             edtPassword.setError("Please enter password");
             return;
         }
 
-        Call<User> call = userService.getUserByEmail(email,pass);
+        Call<User> call = userService.getUserByEmail(email, pass);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     User user = response.body();
                     user.setEmail(email);
                     user.setPassWord(pass);
-                    Log.d("LOGINNNNN", "onResponse: " +user);
-                    if (user.getStatus() == -1 && user.getError() == 2)
-                    {
+                    Log.d("LOGINNNNN", "onResponse: " + user);
+                    if (user.getStatus() == -1 && user.getError() == 2) {
                         Toast.makeText(LoginActivity.this, "invalid Password", Toast.LENGTH_SHORT).show();
 
-                    }
-                    else if (user.getStatus() == -1 && user.getError() == 1)
-                    {
+                    } else if (user.getStatus() == -1 && user.getError() == 1) {
                         Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
 
-                    }
-                    else
-                    {
-                        Toast.makeText(LoginActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("FIRSTNAME", "onResponse: " + response.body().getInfo().getFirstName());
+
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("user", user);
-                        intent.putExtras(bundle);
+
+                        SharedPreferences sharedPref = getSharedPreferences("USER", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("email", email);
+                        editor.putString("pass", pass);
+                        editor.putString("firstname", response.body().getInfo().getFirstName());
+                        editor.putString("lastname", response.body().getInfo().getLastName());
+
+                        editor.commit();
+
                         startActivity(intent);
 
                     }
@@ -144,5 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
         txtSignUp = findViewById(R.id.txtCreateAccount);
+        userService = NoteRepository.getUserService();
     }
 }
