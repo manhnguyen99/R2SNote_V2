@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private TextView txtSignUp;
     private UserService userService;
+    public long backPressedTime;
+    public Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,5 +114,22 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         txtSignUp = findViewById(R.id.txtCreateAccount);
         userService = NoteRepository.getUserService();
+    }    @Override
+
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Nhấn 1 lần nữa để thoát", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
     }
+
 }
