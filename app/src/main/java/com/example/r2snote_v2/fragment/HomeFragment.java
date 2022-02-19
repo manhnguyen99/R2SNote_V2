@@ -69,7 +69,6 @@ public class HomeFragment extends Fragment {
                     pieChart.setData(pieData);
                     pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
                 }
-
             }
 
             @Override
