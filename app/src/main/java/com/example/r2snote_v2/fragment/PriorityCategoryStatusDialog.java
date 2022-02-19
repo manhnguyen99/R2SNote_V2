@@ -58,30 +58,56 @@ public class PriorityCategoryStatusDialog extends DialogFragment {
 
             if (dataName.isEmpty()) {
                 Toast.makeText(getContext()
-                        , "Required Full Information", Toast.LENGTH_LONG).show();
+                        , "Required Full Information", Toast.LENGTH_SHORT).show();
             } else {
-                Call<Result> resultCall = mViewModel.addData(tab, MainActivity.EMAIL, dataName);
-                resultCall.enqueue(new Callback<Result>() {
-                    @Override
-                    public void onResponse(Call<Result> call, Response<Result> response) {
-                        if (response.body().getStatus() == 1) {
-                            Toast.makeText(getContext()
-                                    , "Add " + tab + " Successfully", Toast.LENGTH_LONG).show();
-                            communicateViewModel.makeChanges();
-                            dismiss();
-                        } else {
-                            Toast.makeText(getContext()
-                                    , "Unsuccessful", Toast.LENGTH_LONG).show();
+                if (btnAdd.getText().toString().trim().equals("Add")) {
+                    Call<Result> resultCall = mViewModel.addData(tab, MainActivity.EMAIL, dataName);
+                    resultCall.enqueue(new Callback<Result>() {
+                        @Override
+                        public void onResponse(Call<Result> call, Response<Result> response) {
+                            if (response.body().getStatus() == 1) {
+                                Toast.makeText(getContext()
+                                        , "Add " + tab + " Successfully", Toast.LENGTH_SHORT).show();
+                                communicateViewModel.makeChanges();
+                                dismiss();
+                            } else {
+                                Toast.makeText(getContext()
+                                        , "Unsuccessful", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<Result> call, Throwable t) {
+                            Toast.makeText(getContext()
+                                    , "Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else {
+                    Call<Result> resultCall = mViewModel.updateData(tab, MainActivity.EMAIL, name,dataName);
+                    resultCall.enqueue(new Callback<Result>() {
+                        @Override
+                        public void onResponse(Call<Result> call, Response<Result> response) {
+                            if (response.body().getStatus() == 1) {
+                                Toast.makeText(getContext()
+                                        , "Update " + tab + " Successfully", Toast.LENGTH_SHORT).show();
+                                communicateViewModel.makeChanges();
+                                dismiss();
+                            } else {
+                                Toast.makeText(getContext()
+                                        , "Unsuccessful", Toast.LENGTH_SHORT).show();
+                            }
 
-                    @Override
-                    public void onFailure(Call<Result> call, Throwable t) {
-                        Toast.makeText(getContext()
-                                , "Failed", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        }
+
+                        @Override
+                        public void onFailure(Call<Result> call, Throwable t) {
+                            Toast.makeText(getContext()
+                                    , "Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
             }
 
         });
@@ -105,7 +131,8 @@ public class PriorityCategoryStatusDialog extends DialogFragment {
             tab = mArgs.getString("tab");
             name = mArgs.getString("name");
             createdDate = mArgs.getString("createddate");
-            if (!name.isEmpty()){
+            if (!name.isEmpty()) {
+                btnAdd.setText("Edit");
                 edtName.setText(name);
             }
         }

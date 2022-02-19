@@ -48,7 +48,7 @@ public class EditProfileFragment extends Fragment {
             String nEmail = edtnEmail.getText().toString().trim();
             if (lastName.isEmpty() || firstName.isEmpty() || nEmail.isEmpty()) {
                 Toast.makeText(getContext()
-                        , "Required Full Information", Toast.LENGTH_LONG).show();
+                        , "Required Full Information", Toast.LENGTH_SHORT).show();
             } else {
                 Call<User> userCall = NoteRepository.getUserService().editProfile(MainActivity.EMAIL, nEmail, firstName, lastName);
                 userCall.enqueue(new Callback<User>() {
@@ -56,8 +56,8 @@ public class EditProfileFragment extends Fragment {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.body().getStatus() == 1) {
                             Toast.makeText(getContext()
-                                    , "Change Profile Successfull", Toast.LENGTH_LONG).show();
-                            closeKeyBoard();
+                                    , "Change Profile Successfull", Toast.LENGTH_SHORT).show();
+
                             MainActivity.textView.setText(nEmail);
                             SharedPreferences sharedPref = getContext().getSharedPreferences("USER", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPref.edit();
@@ -72,7 +72,7 @@ public class EditProfileFragment extends Fragment {
                             edtnEmail.setText(nEmail);
                         } else {
                             Toast.makeText(getContext()
-                                    , "Unuccessfull", Toast.LENGTH_LONG).show();
+                                    , "Unuccessfull!Using", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -82,7 +82,7 @@ public class EditProfileFragment extends Fragment {
                     }
                 });
             }
-
+            closeKeyBoard();
 
         });
         btnHome.setOnClickListener(view -> {

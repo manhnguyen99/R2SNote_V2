@@ -139,7 +139,7 @@ public class DialogAddNote extends DialogFragment {
             if (btnAdd.getText().toString().trim().equals("Add")) {
                 if (noteName.getText().toString().trim().isEmpty() || textDatePick.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getContext()
-                            , "Required Full Information", Toast.LENGTH_LONG).show();
+                            , "Required Full Information", Toast.LENGTH_SHORT).show();
                 } else {
 
                     Call<Result> noteCall = noteViewModel.addNote(MainActivity.EMAIL, name, priority, category, status, planDate);
@@ -148,24 +148,24 @@ public class DialogAddNote extends DialogFragment {
                         public void onResponse(Call<Result> call, Response<Result> response) {
                             if (response.body().getStatus() == 1) {
                                 Toast.makeText(getContext()
-                                        , "Add Note Successfully", Toast.LENGTH_LONG).show();
+                                        , "Add Note Successfully", Toast.LENGTH_SHORT).show();
                                 communicateViewModel.makeChanges();
                                 dismiss();
 
                             } else if (response.body().getStatus() == -1) {
                                 if (response.body().getError() == 2) {
                                     Toast.makeText(getContext()
-                                            , "Note's Name was existed", Toast.LENGTH_LONG).show();
+                                            , "Note's Name was existed", Toast.LENGTH_SHORT).show();
                                 } else
                                     Toast.makeText(getContext()
-                                            , "UnSuccessfully", Toast.LENGTH_LONG).show();
+                                            , "UnSuccessfully", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Result> call, Throwable t) {
                             Toast.makeText(getContext()
-                                    , "Failed", Toast.LENGTH_LONG).show();
+                                    , "Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -173,7 +173,7 @@ public class DialogAddNote extends DialogFragment {
             } else {
                 if (noteName.getText().toString().trim().isEmpty() || textDatePick.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getContext()
-                            , "Required Full Information", Toast.LENGTH_LONG).show();
+                            , "Required Full Information", Toast.LENGTH_SHORT).show();
                 } else {
                     Call<Result> noteCall = noteViewModel.updateNote(emailNote, nameNote, noteName.getText().toString().trim(), priorityNote, categoryNote, statusNote, plandateNote);
                     noteCall.enqueue(new Callback<Result>() {
@@ -181,19 +181,19 @@ public class DialogAddNote extends DialogFragment {
                         public void onResponse(Call<Result> call, Response<Result> response) {
                             if (response.body().getStatus() == 1) {
                                 Toast.makeText(getContext(), "Update Note Successful!"
-                                        , Toast.LENGTH_LONG).show();
+                                        , Toast.LENGTH_SHORT).show();
                                 communicateViewModel.makeChanges();
                                 dismiss();
                             } else {
                                 Toast.makeText(getContext(), "Unsuccessful!"
-                                        , Toast.LENGTH_LONG).show();
+                                        , Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Result> call, Throwable t) {
                             Toast.makeText(getContext()
-                                    , "Failed", Toast.LENGTH_LONG).show();
+                                    , "Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
